@@ -29,7 +29,6 @@ const MoviesList = ({ movies, baseUrl }) => {
   if (movies.results.length === 0) {
     return null;
   }
-
   return (
     <React.Fragment>
       <MoviesWrapper>

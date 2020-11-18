@@ -37,7 +37,10 @@ import {
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import { faStar as farFaStar } from '@fortawesome/free-regular-svg-icons';
-
+import Login from './Login';
+import PrivateRoute from '../components/PrivateRoute ';
+import * as TYPES from '../actions/types';
+import Register from './Register';
 library.add(
   fab,
   faArrowLeft,
@@ -95,11 +98,13 @@ const SearhBarWrapper = styled.div`
 ReactGA.initialize('UA-137885307-1');
 ReactGA.pageview(window.location.pathname + window.location.search);
 
-const App = ({ init, isLoading }) => {
+const App = ({ init, isLoading ,user}) => {
   useEffect(() => {
+    setAuth(localStorage.getItem("auth"))
     init();
   }, []);
   const [isMobile, setisMobile] = useState(null);
+  const [auth, setAuth] = useState(false);
 
   // Set amount of items to show on slider based on the width of the element
   const changeMobile = () => {
@@ -109,10 +114,20 @@ const App = ({ init, isLoading }) => {
   };
 
   useEffect(() => {
+    
     changeMobile();
     window.addEventListener('resize', changeMobile);
     return () => window.removeEventListener('resize', changeMobile);
   }, []);
+
+  useEffect(() => {
+    if(user.type === TYPES.LOGIN_SUCCESS && user.payload.isActive === true){
+        setAuth(user.auth);
+    }else if(user.type === TYPES.LOGIN_FAIL){
+        setAuth(user.auth);
+    }
+  }, [user])
+
 
   return isLoading ? (
     <ContentWrapper>
@@ -124,17 +139,21 @@ const App = ({ init, isLoading }) => {
         <MainWrapper isMobile={isMobile}>
           {isMobile ? (
             <MenuMobile />
-          ) : (
-            <>
+          ) : 
+          auth?
+           (
+                <>
               <Sidebar />
               <SearhBarWrapper>
                 <SearchBar />
               </SearhBarWrapper>
-            </>
-          )}
+              </>):<></>
+          }
           <ContentWrapper>
             <Switch>
-              <Route
+               <Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} /> 
+               <Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} /> 
+              <PrivateRoute
                 path={process.env.PUBLIC_URL + '/'}
                 exact
                 render={() => (
@@ -144,22 +163,22 @@ const App = ({ init, isLoading }) => {
                   />
                 )}
               />
-              <Route
+              <PrivateRoute
                 path={process.env.PUBLIC_URL + '/genres/:name'}
                 exact
                 component={Genre}
               />
-              <Route
+              <PrivateRoute
                 path={process.env.PUBLIC_URL + '/discover/:name'}
                 exact
                 component={Discover}
               />
-              <Route
+              <PrivateRoute
                 path={process.env.PUBLIC_URL + '/search/:query'}
                 exact
                 component={Search}
               />
-              <Route
+              <PrivateRoute
                 path={process.env.PUBLIC_URL + '/movie/:id'}
                 exact
                 component={Movie}
@@ -184,6 +203,7 @@ const App = ({ init, isLoading }) => {
                   <NotFound title="Upps!" subtitle={`This doesn't exist...`} />
                 )}
               />
+              
             </Switch>
           </ContentWrapper>
         </MainWrapper>
@@ -192,8 +212,8 @@ const App = ({ init, isLoading }) => {
   );
 };
 
-const mapStateToProps = ({ geral }) => {
-  return { isLoading: geral.loading };
+const mapStateToProps = ({ geral , user}) => {
+  return { isLoading: geral.loading , user :user};
 };
 
 export default connect(
