@@ -296,7 +296,12 @@ const Movie = ({
     getRecommendations(match.params.id, params.page);
     return () => clearRecommendations();
   }, [params.page]);
-
+  useEffect(() => {
+    if(user.type === "SAVE_FILM_SUCCES"){
+      console.log("success");
+    }
+ }, [user]);
+ 
   // If loading
   if (movie.loading) {
     return <Loader />;
@@ -310,11 +315,8 @@ const Movie = ({
     saveFilm({id:id,idFilm:match.params.id});
     
   }
-  // useEffect(() => {
-  //    if(user.type === "SAVE_FILM_SUCCES"){
-  //      console.log("success");
-  //    }
-  // }, [user]);
+ 
+
   return (
     <Wrapper>
       <Helmet>
@@ -411,34 +413,36 @@ function renderBack() {
 
 // Render Personal Website button
 function renderWebsite(link) {
-  // if (!link) {
-  //   return null;
-  // }
-  // return (
-  //   <AWrapper target="_blank" href={link}>
-  //     <Button title="Website" icon="link" />
-  //   </AWrapper>
-  // );
+  if (!link) {
+    return null;
+  }
+  return (
+    <AWrapper target="_blank" href={link}>
+      <Button title="Website" icon="link" />
+    </AWrapper>
+  );
 }
 
 
 // Render IMDB button
 function renderImdb(id) {
-  // if (!id) {
-  //   return null;
-  // }
-  // return (
-  //   <AWrapper target="_blank" href={`https://www.imdb.com/title/${id}`}>
-  //     <Button title="IMDB" icon={['fab', 'imdb']} />
-  //   </AWrapper>
-  // );
+  if (!id) {
+    return null;
+  }
+  return (
+    <AWrapper target="_blank" href={`https://www.imdb.com/title/${id}`}>
+      <Button title="IMDB" icon={['fab', 'imdb']} />
+    </AWrapper>
+  );
 }
 
 // Render Trailer button. On click triggers state to open modal of trailer
 function renderTrailer(videos, modalOpened, setmodalOpened) {
+  console.log(videos);
   if (videos.length === 0) {
     return;
   }
+  console.log(videos);
   const { key } = videos.find(
     video => video.type === 'Trailer' && video.site === 'YouTube'
   );

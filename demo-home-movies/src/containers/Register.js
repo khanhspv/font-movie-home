@@ -45,8 +45,7 @@ const Register = ({registerUser,user}) => {
 
     useEffect(() => {
         if(user.type === TYPES.REGISTER_USER_SUCCES){
-            // setTimeout( alert("We are will check info transaction of you!Thank"), 3000);
-            setTimeout( alert("Transfer to activate your account!Thank"), 3000);
+            setTimeout( alert("We are will check info transaction of you!Thank"), 3000);
             history.push("/login");
         }
     }, [user]);
@@ -98,8 +97,8 @@ const Register = ({registerUser,user}) => {
                       </CCol>
                       <CCol xs="12" md="9">
                         <CSelect custom  name="member" id="Select" onChange={handleInputChange}>
-                          <option value="PREMIUM">PREMIUM = 100K </option>
-                          <option value="BASIC">BASIC = 50K </option>
+                          <option value="PREMIUM">PREMIUM (100k)</option>
+                          <option value="BASIC">BASIC (50k)</option>
                         </CSelect>
                       </CCol>
                     </CFormGroup>
@@ -117,32 +116,22 @@ const Register = ({registerUser,user}) => {
                         />
                       </CCol>
                     </CFormGroup>
-                    <CFormGroup row>
-                        <CCol md="3">
-                            <CLabel htmlFor="textarea-input">Bank transfer</CLabel>
-                        </CCol>
-                        <CCol xs="12" md="9">
-                            <CLabel htmlFor="textarea-input">Bank name: Vietcombank</CLabel><br/>
-                            <CLabel htmlFor="textarea-input">Account number: 123456789</CLabel><br/>
-                            <CLabel htmlFor="textarea-input">Name: Pham Viet Khanh</CLabel><br/>
-                        </CCol>
-                    </CFormGroup>
 
                   <CButton color="success" block onClick={register}>Create Account</CButton>
                 </CForm>
 
 
               </CCardBody>
-              {/*<CCardFooter className="p-4">*/}
-              {/*  <CRow>*/}
-              {/*    <CCol xs="12" sm="6">*/}
-              {/*      <CButton className="btn-facebook mb-1" block><span>facebook</span></CButton>*/}
-              {/*    </CCol>*/}
-              {/*    <CCol xs="12" sm="6">*/}
-              {/*      <CButton className="btn-twitter mb-1" block><span>twitter</span></CButton>*/}
-              {/*    </CCol>*/}
-              {/*  </CRow>*/}
-              {/*</CCardFooter>*/}
+              <CCardFooter className="p-4">
+                <CRow>
+                  <CCol xs="12" sm="6">
+                    <CButton className="btn-facebook mb-1" block onClick={()=>history.push("/login")}><span>Already account Login nơ</span></CButton>
+                  </CCol>
+                  <CCol xs="12" sm="6">
+                    {/* <CButton className="btn-twitter mb-1" block><span>twitter</span></CButton> */}
+                  </CCol>
+                </CRow>
+              </CCardFooter>
             </CCard>
           </CCol>
         </CRow>
