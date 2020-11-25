@@ -65,8 +65,7 @@ const Login = ({user,userLogin,getUser}) => {
 
   return (
     <div className="c-app c-default-layout flex-row align-items-center ">
-       {/* <ToastContainer></ToastContainer> */}
-
+        {/*<ToastContainer></ToastContainer>*/}
       <CContainer>
         <CRow className="justify-content-center mh-100">
           <CCol md="12">
@@ -96,9 +95,9 @@ const Login = ({user,userLogin,getUser}) => {
                       <CCol xs="6">
                         <CButton color="primary" className="px-4" onClick={login}>Login</CButton>
                       </CCol>
-                      <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">Forgot password?</CButton>
-                      </CCol>
+                      {/*<CCol xs="6" className="text-right">*/}
+                      {/*  <CButton color="link" className="px-0">Forgot password?</CButton>*/}
+                      {/*</CCol>*/}
                     </CRow>
                   </CForm>
                 </CCardBody>
@@ -108,7 +107,7 @@ const Login = ({user,userLogin,getUser}) => {
                   <div>
                     <h2>Sign up</h2>
                     <p>No Account. You are sign up now .............................................................................</p>
-                    <Link to="/register">
+                    <Link to="/introduce">
                       <CButton color="primary" className="mt-3" active tabIndex={-1}>Register Now!</CButton>
                     </Link>
                   </div>

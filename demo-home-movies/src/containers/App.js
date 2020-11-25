@@ -40,6 +40,7 @@ import { faStar as farFaStar } from '@fortawesome/free-regular-svg-icons';
 import Login from './Login';
 import PrivateRoute from '../components/PrivateRoute ';
 import * as TYPES from '../actions/types';
+import Introduce from './Introduce';
 import Register from './Register';
 library.add(
   fab,
@@ -158,7 +159,8 @@ const App = ({ init, isLoading ,user}) => {
           <ContentWrapper>
             <Switch>
                <Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} /> 
-               <Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} /> 
+               <Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} />
+              <Route exact path="/introduce" name="Introduce Page" render={props => <Introduce {...props}/>} />
               <PrivateRoute
                 path={process.env.PUBLIC_URL + '/'}
                 exact

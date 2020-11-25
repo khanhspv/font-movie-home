@@ -383,10 +383,10 @@ const Movie = ({
                   modalOpened,
                   setmodalOpened
                 )}
-               {renderFilm(
-                  movie.videos.results,
-                  modalOpened,
-                  setmodalOpened
+                {renderFilm(
+                    movie.videos.results,
+                    modalOpened,
+                    setmodalOpened
                 )}
               </LeftButtons>
               {renderBack()}
@@ -462,24 +462,24 @@ function renderTrailer(videos, modalOpened, setmodalOpened) {
   );
 }
 
-function renderFilm(videos, modalOpened, setmodalOpened) {
-  if (videos.length === 0) {
+function renderFilm(videos, modalOpened, setmodalOpened1) {
+  if (videos.length === 0 ) {
     return;
   }
   const { key } = videos.find(
-    video => video.type === 'Trailer' && video.site === 'YouTube'
+    video => video.type === 'Clip' && video.site === 'YouTube'
   );
 
   return (
     <React.Fragment>
-      <div onClick={() => setmodalOpened(true)}>
-        <Button title="Watch" icon="play" />
+      <div onClick={() => setmodalOpened1(true)}>
+        <Button title="Watch Video" icon="play" />
       </div>
       <ModalVideo
         channel="youtube"
         isOpen={modalOpened}
         videoId={key}
-        onClose={() => setmodalOpened(false)}
+        onClose={() => setmodalOpened1(false)}
       />
     </React.Fragment>
   );

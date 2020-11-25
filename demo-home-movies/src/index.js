@@ -21,7 +21,7 @@ ReactDOM.render(
           <title>Movie Library</title>
           <meta
             name="description"
-            content="A Movie Library where you can check all your favorite movies, as well as the cast of it, and so mucnh more! Made with ❤️ by Fidalgo"
+            content="A Movie Library where you can check all your favorite movies, as well as the cast of it, and so mucnh more! Made with ❤️ by Pham VIet Khanh"
           />
         </Helmet>
         <App />

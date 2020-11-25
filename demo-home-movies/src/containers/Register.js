@@ -45,7 +45,7 @@ const Register = ({registerUser,user}) => {
 
     useEffect(() => {
         if(user.type === TYPES.REGISTER_USER_SUCCES){
-            setTimeout( alert("We are will check info transaction of you!Thank"), 3000);
+            setTimeout( alert("Please make a transfer to activate your account"), 3000);
             history.push("/login");
         }
     }, [user]);
@@ -102,22 +102,46 @@ const Register = ({registerUser,user}) => {
                         </CSelect>
                       </CCol>
                     </CFormGroup>
+                    {/*<CFormGroup row>*/}
+                    {/*  <CCol md="3">*/}
+                    {/*    <CLabel htmlFor="textarea-input">Premium </CLabel>*/}
+                    {/*  </CCol>*/}
+                    {/*  <CCol xs="12" md="9">*/}
+                    {/*      <CLabel htmlFor="textarea-input">Premium </CLabel>*/}
+                    {/*  </CCol>*/}
+                    {/*</CFormGroup>*/}
+                    {/*<CFormGroup row>*/}
+                    {/*    <CCol md="3">*/}
+                    {/*        <CLabel htmlFor="textarea-input">BASIC </CLabel>*/}
+                    {/*    </CCol>*/}
+                    {/*    <CCol xs="12" md="9">*/}
+                    {/*        <CLabel htmlFor="textarea-input">Premium </CLabel>*/}
+                    {/*    </CCol>*/}
+                    {/*</CFormGroup>*/}
                     <CFormGroup row>
-                      <CCol md="3">
-                        <CLabel htmlFor="textarea-input">Info Transaction</CLabel>
-                      </CCol>
-                      <CCol xs="12" md="9">
-                        <CTextarea 
-                          name="content" 
-                          id="textarea-input" 
-                          rows="4"
-                          placeholder="Info Transaction..." 
-                          onChange={handleInputChange}
-                        />
-                      </CCol>
+                        <CCol md="3">
+                            <CLabel htmlFor="textarea-input">Information</CLabel><br/>
+                            <CLabel htmlFor="textarea-input">Bank name </CLabel><br/>
+                            <CLabel htmlFor="textarea-input">Account number </CLabel><br/>
+                            <CLabel htmlFor="textarea-input">Beneficiaries </CLabel><br/>
+                        </CCol>
+                        <CCol xs="12" md="9">
+                            <CLabel htmlFor="textarea-input">  </CLabel><br/>
+                            <CLabel htmlFor="textarea-input"> Vietcombank </CLabel><br/>
+                            <CLabel htmlFor="textarea-input"> 234567  </CLabel><br/>
+                            <CLabel htmlFor="textarea-input"> Pham Viet Khanh  </CLabel><br/>
+                        </CCol>
                     </CFormGroup>
-
+                    <CFormGroup row>
+                    <CCol md="3">
+                        <CLabel htmlFor="textarea-input"> Specify the content of the transfer </CLabel><br/>
+                    </CCol>
+                    <CCol xs="12" md="9">
+                        <CLabel htmlFor="textarea-input"> Transfer account name and content </CLabel><br/>
+                    </CCol>
+                    </CFormGroup>
                   <CButton color="success" block onClick={register}>Create Account</CButton>
+
                 </CForm>
 
 
@@ -125,7 +149,7 @@ const Register = ({registerUser,user}) => {
               <CCardFooter className="p-4">
                 <CRow>
                   <CCol xs="12" sm="6">
-                    <CButton className="btn-facebook mb-1" block onClick={()=>history.push("/login")}><span>Already account Login nơ</span></CButton>
+                    <CButton className="btn-facebook mb-1" block onClick={()=>history.push("/login")}><span>Already account Login </span></CButton>
                   </CCol>
                   <CCol xs="12" sm="6">
                     {/* <CButton className="btn-twitter mb-1" block><span>twitter</span></CButton> */}
