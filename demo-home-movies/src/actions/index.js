@@ -54,6 +54,21 @@ export const logout = () => async dispatch => {
    });
  
  };
+
+export const Cmt = (user) => async dispatch => {
+  await Axios.post(`http://localhost:8080/api/v1/contact`,user).then(res =>{
+    console.log(res)
+    dispatch({
+      type:TYPES.CMT_USER_SUCCES,
+      payload:res.data
+    })
+  }).catch(err =>{
+    dispatch({
+      type:TYPES.CMT_USER_FAIL
+    })
+  });
+
+};
  
 
  export const saveFilm = (user) => async dispatch => {

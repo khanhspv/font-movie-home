@@ -41,6 +41,7 @@ import Login from './Login';
 import PrivateRoute from '../components/PrivateRoute ';
 import * as TYPES from '../actions/types';
 import Introduce from './Introduce';
+import MeList from './MeList';
 import Register from './Register';
 library.add(
   fab,
@@ -161,6 +162,7 @@ const App = ({ init, isLoading ,user}) => {
                <Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} /> 
                <Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} />
               <Route exact path="/introduce" name="Introduce Page" render={props => <Introduce {...props}/>} />
+              <Route exact path="/melist" name="MeList Page" render={props => <Introduce {...props}/>} />
               <PrivateRoute
                 path={process.env.PUBLIC_URL + '/'}
                 exact
@@ -168,6 +170,7 @@ const App = ({ init, isLoading ,user}) => {
                   <Redirect
                     from={process.env.PUBLIC_URL + '/'}
                     to={process.env.PUBLIC_URL + '/discover/Popular'}
+                    // to={process.env.PUBLIC_URL + '/discover/Family'}
                   />
                 )}
               />

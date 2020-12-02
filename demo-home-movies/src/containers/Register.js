@@ -36,10 +36,10 @@ const Register = ({registerUser,user}) => {
 
     const register =()=>{
         console.log({...values,member:{
-            premium:values["member"],content:values["content"]
+            premium:values["member"],content:values["PREMIUM"]
         }});
         registerUser({...values,member:{
-            premium:values["member"],content:values["content"]
+            premium:values["member"],content:values["BASIC"]
         }});
     }
 
@@ -61,6 +61,14 @@ const Register = ({registerUser,user}) => {
                 <CForm>
                   <h1>Register</h1>
                   <p className="text-muted">Create your account</p>
+                    <CInputGroup className="mb-3">
+                        <CInputGroupPrepend>
+                            <CInputGroupText>
+                                <CIcon name="cil-user" />
+                            </CInputGroupText>
+                        </CInputGroupPrepend>
+                        <CInput type="text" placeholder="DisplayName" autoComplete="displayname" name="displayname" onChange={handleInputChange}/>
+                    </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupPrepend>
                       <CInputGroupText>

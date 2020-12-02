@@ -117,6 +117,7 @@ const Sidebar = ({ genres, staticCategories, selected,logout ,user}) => {
         <CButton color="danger" size="md" className="h-100" onClick={signout}>Sign Out</CButton>
         <Heading>Discover</Heading>
         {renderStatic(staticCategories, selected)}
+        <Heading> List </Heading>
         <Heading>Genres</Heading>
         {renderGenres(genres, selected)}
       </Wrapper>

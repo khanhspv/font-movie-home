@@ -9,15 +9,18 @@ import history from '../history';
 import LazyLoad from 'react-lazyload';
 import ModalVideo from 'react-modal-video';
 import { Element, animateScroll as scroll } from 'react-scroll';
+import { Cmt } from '../actions';
 
 import {
   getMovie,
   getRecommendations,
   clearRecommendations,
-  clearMovie,saveFilm
+  clearMovie,saveFilm,
+
 } from '../actions';
 import Rating from '../components/Rating';
 import NotFound from '../components/NotFound';
+
 import Header from '../components/Header';
 import Cast from '../components/Cast';
 import Loader from '../components/Loader';
@@ -25,7 +28,32 @@ import MoviesList from '../components/MoviesList';
 import Button from '../components/Button';
 import NothingSvg from '../svg/nothing.svg';
 import Loading from '../components/Loading';
-import { CButton } from '@coreui/react';
+import {
+  CButton,
+  CContainer,
+  CRow,
+  CCol,
+  CCard,
+  CCardHeader,
+  CCardFooter,
+  CCardTitle,
+  CCardSubtitle,
+  CCardText,
+  CFormGroup,
+  CCardBody,
+  CTabs,
+  CNav,
+  CLabel,
+  CNavItem,
+  CNavLink,
+  CTabContent,
+  CTextarea,
+  CTabPane,
+  CCarousel, CCarouselIndicators, CCarouselInner, CCarouselItem, CCarouselCaption, CCarouselControl,
+  CEmbed, CInputGroup, CInputGroupPrepend, CInputGroupText, CInput, CSelect
+} from '@coreui/react';
+
+
 
 const Wrapper = styled.div`
   display: flex;
@@ -260,18 +288,33 @@ const AWrapper = styled.a`
 `;
 
 //Movie Component
-const Movie = ({
-  location,
-  geral,
-  match,
-  movie,
-  getMovie,
-  clearMovie,
-  recommended,
-  getRecommendations,
-  clearRecommendations,
-  saveFilm,user
-}) => {
+const MovieDetail = ({
+                       location,
+                       geral,
+                       match,
+                       movie,
+                       getMovie,
+                       clearMovie,
+                       recommended,
+                       getRecommendations,
+                       clearRecommendations,
+                       saveFilm,user,handleInputChange
+                     }) => {
+  const Cmt = ({ Cmt , user }) => {
+
+    const [values, setValues] = useState({});
+    const handleInputChange =(event) =>{
+      const target = event.target;
+      const value = target.type === 'checkbox' ? target.checked : target.value;
+      const name = target.name;
+      console.log(value);
+      setValues({...values,
+        [name]: value
+      },);
+    }
+
+  }
+
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [modalOpened, setmodalOpened] = useState(false);
@@ -300,141 +343,331 @@ const Movie = ({
     if(user.type === "SAVE_FILM_SUCCES"){
       console.log("success");
     }
- }, [user]);
- 
+  }, [user]);
+
   // If loading
   if (movie.loading) {
     return <Loader />;
   }
-   
+
   if (movie.status_code) {
     history.push(process.env.PUBLIC_URL + '/404');
   }
   const addListFilm = () =>{
     const id = localStorage.getItem("id");
     saveFilm({id:id,idFilm:match.params.id});
-    
+
   }
- 
+
+
 
   return (
-    <Wrapper>
-      <Helmet>
-        <title>{`${movie.title} - Movie Library`}</title>
-      </Helmet>
-      <LazyLoad height={500}>
-        <MovieWrapper>
-          {!loaded ? (
-            <ImgLoading>
-              <Loading />
-            </ImgLoading>
-          ) : null}
-          <ImageWrapper style={!loaded ? { display: 'none' } : {}}>
-            <MovieImg
-              error={error ? 1 : 0}
-              src={`${secure_base_url}w780${movie.poster_path}`}
-              onLoad={() => setLoaded(true)}
-              // If no image, error will occurr, we set error to true
-              // And only change the src to the nothing svg if it isn't already, to avoid infinite callback
-              onError={e => {
-                setError(true);
-                if (e.target.src !== `${NothingSvg}`) {
-                  e.target.src = `${NothingSvg}`;
-                }
-              }}
-            />
-          </ImageWrapper>
-          <MovieDetails>
-            <HeaderWrapper>
-              <Header size="2" title={movie.title} subtitle={movie.tagline} />
-            </HeaderWrapper>
-            <DetailsWrapper>
+      <Wrapper>
+        <Helmet>
+          <title>{`${movie.title} - Movie Library`}</title>
+        </Helmet>
+        <LazyLoad height={500}>
+          <MovieWrapper>
+            {!loaded ? (
+                <ImgLoading>
+                  <Loading />
+                </ImgLoading>
+            ) : null}
+            <ImageWrapper style={!loaded ? { display: 'none' } : {}}>
+              <MovieImg
+                  error={error ? 1 : 0}
+                  src={`${secure_base_url}w780${movie.poster_path}`}
+                  onLoad={() => setLoaded(true)}
+                  // If no image, error will occurr, we set error to true
+                  // And only change the src to the nothing svg if it isn't already, to avoid infinite callback
+                  onError={e => {
+                    setError(true);
+                    if (e.target.src !== `${NothingSvg}`) {
+                      e.target.src = `${NothingSvg}`;
+                    }
+                  }}
+              />
+            </ImageWrapper>
+            <MovieDetails>
+              <HeaderWrapper>
+                <Header size="2" title={movie.title} subtitle={movie.tagline} />
+              </HeaderWrapper>
+              <DetailsWrapper>
+                <RatingsWrapper>
+                  <Rating number={movie.vote_average / 2} />
+                  <RatingNumber>{movie.vote_average}</RatingNumber>
+                </RatingsWrapper>
+                <Heading>
+                  <h1>
+                    {renderInfo(
+                        movie.spoken_languages,
+                        movie.runtime,
+                        splitYear(movie.release_date)
+                    )}
+                  </h1>
+                </Heading>
+              </DetailsWrapper>
+              <Heading>The Genres</Heading>
+              <LinksWrapper>{renderGenres(movie.genres)}</LinksWrapper>
+              <Heading>The Synopsis</Heading>
+              <Text>
+                {movie.overview
+                    ? movie.overview
+                    : 'There is no synopsis available...'}
+              </Text>
+              <Heading>The Cast</Heading>
+              <Cast cast={movie.cast} baseUrl={secure_base_url} />
+              <ButtonsWrapper>
+                <LeftButtons>
+
+                  <CButton color="primary" onClick={()=>{addListFilm()}} style={{background:"#EBEDEF",color:"#000",
+                    borderColor:"#535C61",borderRadius:"30px",width:"100px",fontSize:"16px"}}>Add</CButton>
+                  {/*{renderWebsite(movie.homepage)}*/}
+                  {/*{renderImdb(movie.imdb_id)}*/}
+                  {renderTrailer(
+                      movie.videos.results,
+                      modalOpened,
+                      setmodalOpened
+                  )}
+                  {renderFilm(
+                      movie.videos.results,
+                      modalOpened,
+                      setmodalOpened
+                  )}
+                </LeftButtons>
+                {renderBack()}
+              </ButtonsWrapper>
+            </MovieDetails>
+          </MovieWrapper>
+        </LazyLoad>
+        <CTabs activeTab="home">
+          <CNav variant="tabs">
+            <CNavItem>
+              <CNavLink data-tab="home">
+                <h2> Detail </h2>
+              </CNavLink>
+            </CNavItem>
+            <CNavItem>
+              <CNavLink data-tab="Recommended">
+                <h2> Recommended </h2>
+              </CNavLink>
+            </CNavItem>
+            <CNavItem>
+              <CNavLink data-tab="evaluate">
+                <h2> Evaluate </h2>
+              </CNavLink>
+            </CNavItem>
+          </CNav>
+          <CTabContent>
+            <CTabPane data-tab="home">
+              <h1> </h1><br/>
+              <Heading>The Synopsis</Heading>
+              <Text>
+                {movie.overview
+                    ? movie.overview
+                    : 'There is no synopsis available...'}
+              </Text>
+              <Heading>Evaluate</Heading>
               <RatingsWrapper>
                 <Rating number={movie.vote_average / 2} />
                 <RatingNumber>{movie.vote_average}</RatingNumber>
               </RatingsWrapper>
-              <Info>
-                {renderInfo(
-                  movie.spoken_languages,
-                  movie.runtime,
-                  splitYear(movie.release_date)
-                )}
-              </Info>
-            </DetailsWrapper>
-            <Heading>The Genres</Heading>
-            <LinksWrapper>{renderGenres(movie.genres)}</LinksWrapper>
-            <Heading>The Synopsis</Heading>
-            <Text>
-              {movie.overview
-                ? movie.overview
-                : 'There is no synopsis available...'}
-            </Text>
-            <Heading>The Cast</Heading>
-            <Cast cast={movie.cast} baseUrl={secure_base_url} />
-            <ButtonsWrapper>
-              <LeftButtons>
-                
-                <CButton color="primary" onClick={()=>{addListFilm()}} style={{background:"#EBEDEF",color:"#000", 
-                borderColor:"#535C61",borderRadius:"30px",width:"100px",fontSize:"16px"}}>Add</CButton>
-                {renderWebsite(movie.homepage)}
-                {renderImdb(movie.imdb_id)}
-                {renderTrailer(
-                  movie.videos.results,
-                  modalOpened,
-                  setmodalOpened
-                )}
-                {renderFilm(
-                    movie.videos.results,
-                    modalOpened,
-                    setmodalOpened
-                )}
-              </LeftButtons>
-              {renderBack()}
-            </ButtonsWrapper>
-          </MovieDetails>
-        </MovieWrapper>
-      </LazyLoad>
-      <Header title="Recommended" subtitle="movies" />
-      {renderRecommended(recommended, secure_base_url)}
-    </Wrapper>
+
+              <ImageWrapper style={!loaded ? { display: 'none' } : {}}>
+                <MovieImg
+                    error={error ? 1 : 0}
+                    src={`${secure_base_url}w780${movie.poster_path}`}
+                    onLoad={() => setLoaded(true)}
+                    // If no image, error will occurr, we set error to true
+                    // And only change the src to the nothing svg if it isn't already, to avoid infinite callback
+                    onError={e => {
+                      setError(true);
+                      if (e.target.src !== `${NothingSvg}`) {
+                        e.target.src = `${NothingSvg}`;
+                      }
+                    }}
+                />
+              </ImageWrapper>
+
+            </CTabPane>
+            <CTabPane data-tab="Recommended">
+
+
+              {renderRecommended(recommended, secure_base_url)}
+
+            </CTabPane>
+            <CTabPane data-tab="evaluate">
+
+
+              <CContainer fluid>
+                <CRow>
+                  <CCol sm="6">
+                    <CCard>
+
+
+
+
+
+                    </CCard>
+                  </CCol>
+                  <CCol sm="6">
+                    <CCard>
+                      <CCardHeader>
+                        <CCardHeader>
+                          <CInputGroup className="mb-3">
+                            <CInput type="text" placeholder="Name" autoComplete="Name"name="userName"  onChange={handleInputChange}/>
+                          </CInputGroup>
+                        </CCardHeader>
+                      </CCardHeader>
+                      <CCardBody>
+
+
+                        <CFormGroup row>
+                          <CCol md="3">
+                            <CLabel htmlFor="textarea-input">Evaluate</CLabel>
+                          </CCol>
+                          <CCol xs="12" md="9">
+                            <CTextarea
+                                name="content"
+                                id="textarea-input"
+                                rows="4"
+                                placeholder=""
+                                onChange={handleInputChange}
+
+                            />
+                          </CCol>
+                        </CFormGroup>
+
+
+                      </CCardBody>
+                      <CCardFooter>
+
+                        <CButton color="success" block onClick={Cmt} > Evaluate </CButton>
+
+                      </CCardFooter>
+                    </CCard>
+                  </CCol>
+                </CRow>
+              </CContainer>
+
+
+
+            </CTabPane>
+          </CTabContent>
+        </CTabs>
+        {/*{renderRecommended(recommended, secure_base_url)}*/}
+      </Wrapper>
   );
 };
 
+
+
+
+
+
 //Render the back button if user was pushed into page
 function renderBack() {
-  if (history.action === 'PUSH') {
-    return (
+  // if (history.action === 'PUSH') {
+  return (
       <div onClick={history.goBack}>
         <Button title="Back" solid left icon="arrow-left" />
       </div>
-    );
-  }
+  );
+  // }
 }
 
-// Render Personal Website button
-function renderWebsite(link) {
-  if (!link) {
-    return null;
+function renderCmt() {
+  class TodoApp extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { items: [], text: '' };
+      this.handleChange = this.handleChange.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    render() {
+      return (
+          <div>
+            <h3>TODO</h3>
+            <TodoList items={this.state.items} />
+            <form onSubmit={this.handleSubmit}>
+              <label htmlFor="new-todo">
+                What needs to be done?
+              </label>
+              <input
+                  id="new-todo"
+                  onChange={this.handleChange}
+                  value={this.state.text}
+              />
+              <button>
+                Add #{this.state.items.length + 1}
+              </button>
+            </form>
+          </div>
+      );
+    }
+
+    handleChange(e) {
+      this.setState({ text: e.target.value });
+    }
+
+    handleSubmit(e) {
+      e.preventDefault();
+      if (this.state.text.length === 0) {
+        return;
+      }
+      const newItem = {
+        text: this.state.text,
+        id: Date.now()
+      };
+      this.setState(state => ({
+        items: state.items.concat(newItem),
+        text: ''
+      }));
+    }
   }
-  return (
-    <AWrapper target="_blank" href={link}>
-      <Button title="Website" icon="link" />
-    </AWrapper>
-  );
+
+  class TodoList extends React.Component {
+    render() {
+      return (
+          <ul>
+            {this.props.items.map(item => (
+                <li key={item.id}>{item.text}</li>
+            ))}
+          </ul>
+      );
+    }
+  }
+
+
 }
+
+
+
+// Render Personal Website button
+// function renderWebsite(link) {
+//     if (!link) {
+//         return null;
+//     }
+//     return (
+//         <AWrapper target="_blank" href={link}>
+//             <Button title="Website" icon="link" />
+//         </AWrapper>
+//     );
+// }
 
 
 // Render IMDB button
-function renderImdb(id) {
-  if (!id) {
-    return null;
-  }
-  return (
-    <AWrapper target="_blank" href={`https://www.imdb.com/title/${id}`}>
-      <Button title="IMDB" icon={['fab', 'imdb']} />
-    </AWrapper>
-  );
-}
+// function renderImdb(id) {
+//     if (!id) {
+//         return null;
+//     }
+//     return (
+//         <AWrapper target="_blank" href={`https://www.imdb.com/title/${id}`}>
+//             <Button title="IMDB" icon={['fab', 'imdb']} />
+//         </AWrapper>
+//     );
+// }
 
 // Render Trailer button. On click triggers state to open modal of trailer
 function renderTrailer(videos, modalOpened, setmodalOpened) {
@@ -444,44 +677,41 @@ function renderTrailer(videos, modalOpened, setmodalOpened) {
   }
   console.log(videos);
   const { key } = videos.find(
-    video => video.type === 'Trailer' && video.site === 'YouTube'
+      video => video.type === 'Trailer' && video.site === 'YouTube'
   );
 
   return (
-    <React.Fragment>
-      <div onClick={() => setmodalOpened(true)}>
-        <Button title="Trailer" icon="play" />
-      </div>
-      <ModalVideo
-        channel="youtube"
-        isOpen={modalOpened}
-        videoId={key}
-        onClose={() => setmodalOpened(false)}
-      />
-    </React.Fragment>
+      <React.Fragment>
+        <div onClick={() => setmodalOpened(true)}>
+          <Button title="Trailer" icon="play" />
+        </div>
+        <ModalVideo
+
+        />
+      </React.Fragment>
   );
 }
 
-function renderFilm(videos, modalOpened, setmodalOpened1) {
-  if (videos.length === 0 ) {
+function renderFilm(videos, modalOpened, setmodalOpened) {
+  if (videos.length === 0) {
     return;
   }
   const { key } = videos.find(
-    video => video.type === 'Clip' && video.site === 'YouTube'
+      video => video.type === 'Trailer' && video.site === 'YouTube'
   );
 
   return (
-    <React.Fragment>
-      <div onClick={() => setmodalOpened1(true)}>
-        <Button title="Watch Video" icon="play" />
-      </div>
-      <ModalVideo
-        channel="youtube"
-        isOpen={modalOpened}
-        videoId={key}
-        onClose={() => setmodalOpened1(false)}
-      />
-    </React.Fragment>
+      <React.Fragment>
+        <div onClick={() => setmodalOpened(true)}>
+          <Button title="Watch Video" icon="play" />
+        </div>
+        <ModalVideo
+            channel="youtube"
+            isOpen={modalOpened}
+            videoId={key}
+            onClose={() => setmodalOpened(false)}
+        />
+      </React.Fragment>
   );
 }
 
@@ -502,9 +732,9 @@ function renderInfo(languages, time, data) {
   }
   info.push(time, data);
   return info
-    .filter(el => el !== null)
-    .map(el => (typeof el === 'number' ? `${el} min.` : el))
-    .map((el, i, array) => (i !== array.length - 1 ? `${el} / ` : el));
+      .filter(el => el !== null)
+      .map(el => (typeof el === 'number' ? `${el} min.` : el))
+      .map((el, i, array) => (i !== array.length - 1 ? `${el} / ` : el));
 }
 
 // Render recommended movies
@@ -513,34 +743,38 @@ function renderRecommended(recommended, base_url) {
     return <Loader />;
   } else if (recommended.total_results === 0) {
     return (
-      <NotFound
-        title="Sorry!"
-        subtitle={`There are no recommended movies...`}
-      />
+        <NotFound
+            title="Sorry!"
+            subtitle={`There are no recommended movies...`}
+        />
     );
   } else {
     return (
-      <Element name="scroll-to-element">
-        <MoviesList movies={recommended} baseUrl={base_url} />;
-      </Element>
+        <Element name="scroll-to-element">
+          <MoviesList movies={recommended} baseUrl={base_url} />;
+        </Element>
     );
   }
 }
 
+
+
+
+
 // Render Genres with links
 function renderGenres(genres) {
   return genres.map(genre => (
-    <StyledLink
-      to={`${process.env.PUBLIC_URL}/genres/${genre.name}`}
-      key={genre.id}
-    >
-      <FontAwesomeIcon
-        icon="dot-circle"
-        size="1x"
-        style={{ marginRight: '5px' }}
-      />
-      {genre.name}
-    </StyledLink>
+      <StyledLink
+          to={`${process.env.PUBLIC_URL}/genres/${genre.name}`}
+          key={genre.id}
+      >
+        <FontAwesomeIcon
+            icon="dot-circle"
+            size="1x"
+            style={{ marginRight: '5px' }}
+        />
+        {genre.name}
+      </StyledLink>
   ));
 }
 
@@ -552,7 +786,8 @@ const mapStateToProps = ({ movie, geral, recommended,user }) => ({
   user
 });
 
+
 export default connect(
-  mapStateToProps,
-  { getMovie, clearMovie, getRecommendations, clearRecommendations, saveFilm }
-)(Movie);
+    mapStateToProps,
+    { getMovie, clearMovie, getRecommendations, clearRecommendations, saveFilm }
+)(MovieDetail);

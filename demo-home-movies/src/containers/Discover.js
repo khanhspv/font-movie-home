@@ -52,7 +52,7 @@ const Discover = ({
 
   // Else return movies list
   return (
-    <Wrapper>
+      <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
         <title>{`${geral.selected} Movies`}</title>

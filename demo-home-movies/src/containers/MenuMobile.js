@@ -174,6 +174,8 @@ const MenuMobile = ({ genres, staticCategories, selected }) => {
       <Menu isOpen={isOpened} onStateChange={isMenuOpen} styles={styles}>
         <Heading>Discover</Heading>
         {renderStatic(staticCategories, selected, setisOpened)}
+        <Heading> List </Heading>
+
         <Heading>Genres</Heading>
         {renderGenres(genres, selected, setisOpened)}
         {/*<StyledCoffe*/}

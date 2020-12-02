@@ -24,32 +24,6 @@ import {Link} from "react-router-dom";
 
 const Introduce = ({registerUser,user}) => {
 
-    const [values, setValues] = useState({});
-    const handleInputChange =(event) =>{
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        console.log(value);
-        setValues({...values,
-            [name]: value
-        },);
-    }
-
-    const register =()=>{
-        console.log({...values,member:{
-                premium:values["member"],content:values["content"]
-            }});
-        registerUser({...values,member:{
-                premium:values["member"],content:values["content"]
-            }});
-    }
-
-    useEffect(() => {
-        if(user.type === TYPES.REGISTER_USER_SUCCES){
-            setTimeout( alert("Please make a transfer to activate your account"), 3000);
-            history.push("/login");
-        }
-    }, [user]);
 
 
     return (
